@@ -14,13 +14,18 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Install chktex
+      - name: Install TeX Live and chktex
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends chktex
+          sudo apt-get install -y --no-install-recommends \
+            texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended \
+            texlive-bibtex-extra biber xzdec texlive-lang-other latexmk chktex
 
-      - name: Lint LaTeX sources
+      - name: Validate LaTeX (compile + resolved-reference scan)
         run: make validate
+
+      - name: Lint LaTeX sources (chktex style)
+        run: make lint
 
       - name: Verify resource files
         run: |

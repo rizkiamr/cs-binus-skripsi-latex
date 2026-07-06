@@ -32,7 +32,7 @@ Pada Ubuntu/Debian, instalasi dapat dilakukan dengan perintah berikut:
 ```bash
 sudo apt-get -qq update && sudo apt-get install -y --no-install-recommends \
     texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended \
-    texlive-bibtex-extra biber xzdec texlive-lang-other latexmk
+    texlive-bibtex-extra biber xzdec texlive-lang-other latexmk chktex
 ```
 
 ## Penggunaan
@@ -44,7 +44,8 @@ Templat ini dilengkapi skrip kompilasi. Untuk membangun dokumen:
 ```bash
 make          # bersihkan lalu bangun
 make build    # bangun saja (tanpa clean)
-make validate # periksa sumber LaTeX dengan chktex
+make validate # kompilasi cepat + pindai log untuk referensi/sitasi tak terdefinisi
+make lint     # periksa gaya sumber LaTeX dengan chktex
 make clean    # hapus artefak build
 ```
 
@@ -108,7 +109,7 @@ Tabel dengan `\caption` otomatis masuk ke **Daftar Tabel**. Simpan berkas CSV di
 
 ## CI / Build Otomatis
 
-GitHub Actions menjalankan job **Validate LaTeX** (`make validate` dengan chktex dan pemeriksaan berkas resource) pada pull request ke `main`/`master`. Job **Build PDF** hanya dijalankan pada push ke `main`/`master`.
+GitHub Actions menjalankan job **Validate LaTeX** pada pull request ke `main`/`master`: `make validate` (kompilasi draf cepat lalu pindai log untuk referensi/sitasi tak terdefinisi yang tetap membuat build "berhasil"), `make lint` (gaya chktex), dan pemeriksaan berkas resource. Job **Build PDF** hanya dijalankan pada push ke `main`/`master`.
 
 Jika Anda tidak ingin membangun PDF secara lokal, cukup **push** perubahan ke branch `main` atau `master` di fork repositori Anda. GitHub Actions akan mengompilasi tesis dan mengunggah hasilnya sebagai artifact **`thesis-pdf`**. Unduh PDF terbaru dari tab **Actions** → pilih workflow run → bagian **Artifacts**:
 
